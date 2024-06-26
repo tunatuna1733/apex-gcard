@@ -1,3 +1,8 @@
+import { TrackerKeyType, trackerData, trackerKeys } from './data/global.ts';
+import { modes } from './data/mode.ts';
+import { SeasonData, seasons } from './data/season.ts';
+import { weapons, WeaponData, weaponCategories, WeaponCategoryNames } from './data/weapon.ts';
+
 type TrackerSetFileContents = {
   assetName?: string;
   SAID?: string;
@@ -7,13 +12,73 @@ type TrackerSetFileContents = {
   grxRef?: string;
   statRef?: string;
   color?: string;
+  character?: string;
+  weaponData?: WeaponData;
+  seasonData?: SeasonData;
+  displayName?: string;
 };
 
-const parseTrackerSetFile = (fileContents: string) => {
+const generateDisplayName = (statRef?: string, character?: string) => {
+  if (!statRef) return;
+  let displayName = '';
+  const stats = statRef.replace('stats.', '').split('.');
+  if (stats[0] === 'kills') {
+    return 'Apex Kills';
+  } else if (stats[0] === 'revived_ally') {
+    return 'Apex Revives';
+  } else if (stats[0] === 'placements_win') {
+    return 'Apex Wins';
+  } else if (stats.length === 1) {
+    const names = stats[0].split('_');
+    names.forEach((n) => {
+      if (displayName !== '') displayName += ' ';
+      displayName += n.charAt(0).toUpperCase() + n.slice(1);
+    });
+    return displayName;
+  }
+  stats.forEach((s) => {
+    if (displayName !== '') displayName += ' ';
+    // variable included
+    if (s.match(/weapons\[SAID\d+\]/)) {
+      const weaponSAIDResult = s.match(/SAID\d+/);
+      if (weaponSAIDResult) {
+        const weaponSAID = weaponSAIDResult[0];
+        const weaponData = weapons.find((weapon) => weapon.SAID === weaponSAID);
+        displayName += weaponData?.displayName;
+      }
+    } else if (s.match(/seasons\[SAID\d+\]/)) {
+      const seasonSAIDResult = s.match(/SAID\d+/);
+      if (seasonSAIDResult) {
+        const seasonSAID = seasonSAIDResult[0];
+        const seasonData = seasons.find((season) => season.SAID === seasonSAID);
+        displayName += `S${seasonData?.seasonNum}`;
+      }
+    } else if (s === 'characters[%char%]') {
+      if (character) displayName += character?.charAt(0).toUpperCase() + character?.slice(1);
+    } else if (s.startsWith('mode')) {
+      modes.forEach((m) => {
+        if (s.includes(m.internalName)) displayName += m.displayName;
+      });
+    } else if (s.startsWith('weaponcategories')) {
+      const weaponCategory = s.replace('weaponcategories[', '').replace(']', '') as WeaponCategoryNames;
+      if (weaponCategory in weaponCategories) {
+        displayName += weaponCategories[weaponCategory];
+      }
+    }
+    // global
+    else if ((trackerKeys as readonly string[]).includes(s)) {
+      displayName += trackerData[s as TrackerKeyType];
+    }
+  });
+  return displayName;
+};
+
+const parseTrackerSetFile = (fileContents: string, character?: string) => {
   const matchRegex = /\t(\S+)\s\"(.*)\"/gm;
   const keyValueRegex = /(\S+)\s\"(.*)\"/gm;
   const lines = fileContents.split('\n');
   const setFileContents: TrackerSetFileContents = {};
+  setFileContents.character = character;
   lines.forEach((line, index) => {
     if (index === 0) return;
     if (!matchRegex.test(line)) return;
@@ -34,12 +99,22 @@ const parseTrackerSetFile = (fileContents: string) => {
     else if (key === 'color0') setFileContents.color = value;
     keyValueRegex.exec(''); // bad practice :(
   });
+
+  if (!setFileContents.statRef) {
+    if (setFileContents.SAID === '1905735931') {
+      // empty
+      setFileContents.displayName = '';
+    }
+  } else {
+    setFileContents.displayName = generateDisplayName(setFileContents.statRef, character);
+  }
+
   return setFileContents;
 };
 
-const readTrackerSetFile = async (path: string) => {
+const readTrackerSetFile = async (path: string, character?: string) => {
   const fileContents = await Deno.readTextFile(path);
-  const parsedInfo = parseTrackerSetFile(fileContents);
+  const parsedInfo = parseTrackerSetFile(fileContents, character);
   return parsedInfo;
 };
 
@@ -57,7 +132,7 @@ const generateTrackerInfo = async () => {
   for await (const charName of charDirs) {
     for await (const dirEntry of Deno.readDir(`${baseDir}/${charName}`)) {
       if (dirEntry.isFile) {
-        const setFileContents = await readTrackerSetFile(`${baseDir}/${charName}/${dirEntry.name}`);
+        const setFileContents = await readTrackerSetFile(`${baseDir}/${charName}/${dirEntry.name}`, charName);
         setFileInfo.push(setFileContents);
       }
     }
