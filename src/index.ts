@@ -3,6 +3,8 @@ import { modes } from './data/mode.ts';
 import { SeasonData, seasons } from './data/season.ts';
 import { weapons, WeaponData, weaponCategories, WeaponCategoryNames } from './data/weapon.ts';
 
+const CURRENT_SEASON_NUM = 21;
+
 type TrackerSetFileContents = {
   assetName?: string;
   SAID?: string;
@@ -16,6 +18,7 @@ type TrackerSetFileContents = {
   weaponData?: WeaponData;
   seasonData?: SeasonData;
   displayName?: string;
+  trackable?: TrackableType;
 };
 
 const generateDisplayName = (statRef?: string, character?: string) => {
@@ -73,6 +76,53 @@ const generateDisplayName = (statRef?: string, character?: string) => {
   return displayName;
 };
 
+type TrackableType = 'kills' | 'revives' | 'wins' | 'damage' | 'none';
+
+const checkTrackable = (statRef?: string): TrackableType => {
+  if (!statRef) return 'none';
+  const currentSeasonSAID = seasons.find((s) => s.seasonNum === CURRENT_SEASON_NUM)?.SAID;
+  const stats = statRef.replace('stats.', '').split('.');
+  if (stats.length === 1) {
+    // career stats
+    if (stats[0] === 'kills') {
+      return 'kills';
+    } else if (stats[0] === 'revived_ally') {
+      return 'revives';
+    } else if (stats[0] === 'placements_win') {
+      return 'wins';
+    } else {
+      return 'none';
+    }
+  } else if (stats.length === 2 && stats[0] === 'characters[%char%]') {
+    // character stats
+    if (stats[1] === 'kills') {
+      return 'kills';
+    } else if (stats[1] === 'revived_ally') {
+      return 'revives';
+    } else if (stats[1] === 'placements_win') {
+      return 'wins';
+    } else if (stats[1] === 'damage_done') {
+      return 'damage';
+    } else {
+      return 'none';
+    }
+  } else if (stats.length === 3 && stats[0] === `seasons[${currentSeasonSAID}]` && stats[1] === 'characters[%char%]') {
+    // season character stats
+    if (stats[2] === 'kills') {
+      return 'kills';
+    } else if (stats[2] === 'revived_ally') {
+      return 'revives';
+    } else if (stats[2] === 'placements_win') {
+      return 'wins';
+    } else if (stats[2] === 'damage_done') {
+      return 'damage';
+    } else {
+      return 'none';
+    }
+  }
+  return 'none';
+};
+
 const parseTrackerSetFile = (fileContents: string, character?: string) => {
   const matchRegex = /\t(\S+)\s\"(.*)\"/gm;
   const keyValueRegex = /(\S+)\s\"(.*)\"/gm;
@@ -107,6 +157,7 @@ const parseTrackerSetFile = (fileContents: string, character?: string) => {
     }
   } else {
     setFileContents.displayName = generateDisplayName(setFileContents.statRef, character);
+    setFileContents.trackable = checkTrackable(setFileContents.statRef);
   }
 
   return setFileContents;
