@@ -19,6 +19,7 @@ type TrackerSetFileContents = {
   seasonData?: SeasonData;
   displayName?: string;
   trackable?: TrackableType;
+  trackerType?: 'STAT' | 'ART' | 'BOTH';
 };
 
 const generateDisplayName = (statRef?: string, character?: string) => {
@@ -124,19 +125,16 @@ const checkTrackable = (statRef?: string): TrackableType => {
 };
 
 const parseTrackerSetFile = (fileContents: string, character?: string) => {
-  const matchRegex = /\t(\S+)\s\"(.*)\"/gm;
-  const keyValueRegex = /(\S+)\s\"(.*)\"/gm;
+  // const matchRegex = /\t(\S+)\s\"(.*)\"/gm;
   const lines = fileContents.split('\n');
   const setFileContents: TrackerSetFileContents = {};
   setFileContents.character = character;
   lines.forEach((line, index) => {
     if (index === 0) return;
-    if (!matchRegex.test(line)) return;
-    const result = keyValueRegex.exec(line.replace('\t', ''));
-    if (!result) return;
-    if (!result[1] || !result[2]) return;
-    const key = result[1],
-      value = result[2];
+    // if (!matchRegex.test(line)) return;
+    const [key, ...values] = line.replace('\t', '').split(' ');
+    if (!key || !values) return;
+    const value = values.join(' ').replace('$', '').replaceAll('"', '');
     if (key === 'assetName') setFileContents.assetName = value;
     else if (key === 'settingsAssetID') {
       const SAID = parseInt(value.replace('SAID', '')).toString();
@@ -147,9 +145,9 @@ const parseTrackerSetFile = (fileContents: string, character?: string) => {
     else if (key === 'grxRef') setFileContents.grxRef = value;
     else if (key === 'statRef') setFileContents.statRef = value;
     else if (key === 'color0') setFileContents.color = value;
-    keyValueRegex.exec(''); // bad practice :(
+    else if (key === 'trackerType') setFileContents.trackerType = value as typeof setFileContents.trackerType;
+    // keyValueRegex.exec(''); // bad practice :(
   });
-
   if (!setFileContents.statRef) {
     if (setFileContents.SAID === '1905735931') {
       // empty
@@ -170,7 +168,7 @@ const readTrackerSetFile = async (path: string, character?: string) => {
 };
 
 const generateTrackerInfo = async () => {
-  const baseDir = '../exported_files/stgs/settings/itemflav/gcard_tracker';
+  const baseDir = './exported_files/stgs/settings/itemflav/gcard_tracker';
   const charDirs: string[] = [];
   const setFileInfo: TrackerSetFileContents[] = [];
   for await (const dirEntry of Deno.readDir(baseDir)) {
