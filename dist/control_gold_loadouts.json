@@ -1,0 +1,42 @@
+{
+    "BLITZ": [
+        {
+            "firstWeapon": "Gold Spitfire",
+            "secondWeapon": "Gold Mozambique Akimbo"
+        },
+        {
+            "firstWeapon": "Gold Spitfire",
+            "secondWeapon": "Gold P2020 Akimbo"
+        }
+    ],
+    "HEAVY": [
+        {
+            "firstWeapon": "Gold Rampage",
+            "secondWeapon": "Gold P2020 Akimbo"
+        },
+        {
+            "firstWeapon": "Gold Rampage",
+            "secondWeapon": "Gold Mozambique Akimbo"
+        }
+    ],
+    "ASSAULT": [
+        {
+            "firstWeapon": "Gold L Star",
+            "secondWeapon": "Gold Mozambique Akimbo"
+        },
+        {
+            "firstWeapon": "Gold L Star",
+            "secondWeapon": "Gold P2020 Akimbo"
+        }
+    ],
+    "SPECIALIST": [
+        {
+            "firstWeapon": "Gold Devotion",
+            "secondWeapon": "Gold P2020 Akimbo"
+        },
+        {
+            "firstWeapon": "Gold Devotion",
+            "secondWeapon": "Gold Mozambique Akimbo"
+        }
+    ]
+}

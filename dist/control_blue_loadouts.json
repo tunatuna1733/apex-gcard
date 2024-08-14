@@ -1,0 +1,152 @@
+{
+    "BLITZ": [
+        {
+            "firstWeapon": "Blue Volt SMG",
+            "secondWeapon": "Blue PeaceKeeper"
+        },
+        {
+            "firstWeapon": "Blue Volt SMG",
+            "secondWeapon": "Blue P2020 Akimbo"
+        },
+        {
+            "firstWeapon": "Blue R301",
+            "secondWeapon": "Blue PeaceKeeper"
+        },
+        {
+            "firstWeapon": "Blue Havoc",
+            "secondWeapon": "Blue Mastiff"
+        },
+        {
+            "firstWeapon": "Blue Volt SMG",
+            "secondWeapon": "Blue Mastiff"
+        },
+        {
+            "firstWeapon": "Blue Car SMG",
+            "secondWeapon": "Blue EVA8"
+        },
+        {
+            "firstWeapon": "Blue R301",
+            "secondWeapon": "Blue EVA8"
+        }
+    ],
+    "HEAVY": [
+        {
+            "firstWeapon": "Blue Rampage",
+            "secondWeapon": "Blue Mozambique Akimbo"
+        },
+        {
+            "firstWeapon": "Blue Rampage",
+            "secondWeapon": "Blue P2020 Akimbo"
+        },
+        {
+            "firstWeapon": "Blue Spitfire",
+            "secondWeapon": "Blue P2020 Akimbo"
+        },
+        {
+            "firstWeapon": "Blue Spitfire",
+            "secondWeapon": "Blue Mozambique Akimbo"
+        },
+        {
+            "firstWeapon": "Blue L Star",
+            "secondWeapon": "Blue Wingman"
+        },
+        {
+            "firstWeapon": "Blue L Star",
+            "secondWeapon": "Blue RE45"
+        },
+        {
+            "firstWeapon": "Blue L Star",
+            "secondWeapon": "Blue Mozambique Akimbo"
+        }
+    ],
+    "ASSAULT": [
+        {
+            "firstWeapon": "Blue R301",
+            "secondWeapon": "Blue Car SMG"
+        },
+        {
+            "firstWeapon": "Blue Flatline",
+            "secondWeapon": "Blue RE45"
+        },
+        {
+            "firstWeapon": "Blue Flatline",
+            "secondWeapon": "Blue Volt SMG"
+        },
+        {
+            "firstWeapon": "Blue R301",
+            "secondWeapon": "Blue P2020 Akimbo"
+        },
+        {
+            "firstWeapon": "Blue Havoc",
+            "secondWeapon": "Blue Alternator"
+        },
+        {
+            "firstWeapon": "Blue R301",
+            "secondWeapon": "Blue Alternator"
+        },
+        {
+            "firstWeapon": "Blue Flatline",
+            "secondWeapon": "Blue Mozambique Akimbo"
+        }
+    ],
+    "SPECIALIST": [
+        {
+            "firstWeapon": "Blue Hemlok",
+            "secondWeapon": "Blue RE45"
+        },
+        {
+            "firstWeapon": "Blue G7 Scout",
+            "secondWeapon": "Blue Prowler"
+        },
+        {
+            "firstWeapon": "Blue G7 Scout",
+            "secondWeapon": "Blue Wingman"
+        },
+        {
+            "firstWeapon": "Blue Nemesis",
+            "secondWeapon": "Blue RE45"
+        },
+        {
+            "firstWeapon": "Blue 30-30 Repeater",
+            "secondWeapon": "Blue Car SMG"
+        },
+        {
+            "firstWeapon": "Blue 30-30 Repeater",
+            "secondWeapon": "Blue P2020 Akimbo"
+        },
+        {
+            "firstWeapon": "Blue Nemesis",
+            "secondWeapon": "Blue Alternator"
+        }
+    ],
+    "LONGRANGE": [
+        {
+            "firstWeapon": "Blue Triple Take",
+            "secondWeapon": "Blue Prowler"
+        },
+        {
+            "firstWeapon": "Blue Longbow",
+            "secondWeapon": "Blue R301"
+        },
+        {
+            "firstWeapon": "Blue Longbow",
+            "secondWeapon": "Blue Flatline"
+        },
+        {
+            "firstWeapon": "Blue Sentinel",
+            "secondWeapon": "Blue Flatline"
+        },
+        {
+            "firstWeapon": "Blue Sentinel",
+            "secondWeapon": "Blue R301"
+        },
+        {
+            "firstWeapon": "Blue Triple Take",
+            "secondWeapon": "Blue Volt SMG"
+        },
+        {
+            "firstWeapon": "Blue Charge Rifle",
+            "secondWeapon": "Blue Car SMG"
+        }
+    ]
+}
